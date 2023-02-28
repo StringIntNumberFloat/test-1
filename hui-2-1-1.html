@@ -1,0 +1,104 @@
+<html>
+<head>
+	<link rel="stylesheet" href="hui2.css" type="text/css">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>Фигуры Лиссажу</title>
+	<script type="text/javascript" src="https://yandex.st/jquery/1.8.2/jquery.min.js"></script>
+	
+	<style type="text/css">
+		* {padding: 0; margin: 0; font-size: 13px;}
+		canvas { border: 1px solid gray; }
+		p {display: inline-block; margin-top: 12px;}
+		body {
+		background: url("https://i.ibb.co/F4T05y8/image.jpg");
+		width:100%;
+		margin-left: auto;
+		}
+	</style>
+</head>
+	
+<body>
+
+<table style="width: 100%;">
+<tr>
+	<td style="width: 200px; vertical-align: top; padding: 10px;">
+		<p style="font-weight: bold;">Изучение фигур Лиссажу</p>
+		<p>
+			коэфф. Х:
+			<br />
+			<input type="text" name="koeff_x" id="koeff_x" value="1">
+		</p>
+		<p>
+			коэфф. Y:
+			<br />
+			<input type="text" name="koeff_y" id="koeff_y" value="1">
+		</p>
+		<p>
+			<input type="checkbox" name="faza_change" id="faza_change">
+			<label for="faza_change">сдвиг фазы</label>
+		</p>
+		<p>
+			<input type="button" value="Обновить анимацию" onClick="update_animation();">
+		</p>
+	</td>
+	<td>
+		<canvas id="spiral" width="600" height="600"></canvas>
+	</td>
+</tr>
+</table>
+
+<script>
+
+var faza = 0;
+var faza_change = false;
+var koeff_x = 1;
+var koeff_y = 1;
+
+function update_animation() {
+	var input_x = $("#koeff_x").val();
+	if ('' != input_x && !isNaN(input_x)) koeff_x = input_x;
+	
+	var input_y = $("#koeff_y").val();
+	if ('' != input_y && !isNaN(input_y)) koeff_y = input_y;
+	
+	if ($("#faza_change").prop('checked')) {
+		faza_change = true;
+	} else {
+		faza_change = false;
+	}
+}
+
+function draw() {
+	// поле для рисования
+	var canvas = document.getElementById('spiral');
+	if (canvas.getContext) {
+		var ctx = canvas.getContext('2d');
+	}
+	
+	ctx.clearRect(0, 0, 600, 600);
+	
+	var center_x = 300;
+	var center_y = 300;
+	var amplituda = 250;
+	
+	#Для изменения кол-ва точек, мы должны поменять Значение 0.001
+	for (angle = 0; angle < 50; angle = angle + 0.001) {
+		// вычисляем координаты
+		x = center_x + amplituda*Math.cos(koeff_x*angle);
+		y = center_y + amplituda*Math.cos(koeff_y*angle + faza);
+	
+		// рисуем точку
+		ctx.fillRect(x, y, 3, 3);
+	}
+	
+	if (faza_change) {
+		faza = faza + 0.05;
+	}
+}
+
+setInterval("draw()", 100);
+
+</script>
+
+</body>
+</html>
